@@ -4,12 +4,16 @@ def metodo_trapezio():
     print ("Método do Trapézio\n")
     funcao = input("Digite a função f(x): ")
     f = criar_funcao(funcao)
-    a = traduzir_numero("Digite o limite inferior da integração: ")
-    b = traduzir_numero("Digite o limite superior da integração: ")
-    n = traduzir_numero("Digite o número de subintervalos: ")
+    a = traduzir_numero(input("Digite o limite inferior da integração: "), "limite inferior")
+    b = traduzir_numero(input("Digite o limite superior da integração: "), "limite superior")
+    n = traduzir_numero(input("Digite o número de subintervalos: "), "número de subintervalos")
+
+    if n != int(n) or n < 1:
+        raise ExpressaoInvalidaError("O número de subintervalos deve ser um inteiro positivo.")
+    n = int(n)
 
     resultado = trapezio(f, a, b, n)
-    erro = erro_truncamento_trapezio(f, n, [a, b])
+    erro = erro_truncamento_trapezio(funcao, n, [a, b])
     drp = desvio_relativo_percentual(funcao, resultado, [a, b])
     print(f"O valor da integral é: {resultado}, com erro de truncamento estimado: {erro}\nDesvio relativo percentual em relação à integral de referência: {drp}%\n")
 
@@ -28,9 +32,9 @@ def trapezio(f, a, b, n):
 
 def erro_truncamento_trapezio(funcao, n, intervalos):
 
-
+    ordem = 2
     
-    df = criar_derivada(criar_funcao(funcao))
+    df = criar_derivada(funcao, ordem)
     if df == 0:
         raise ExpressaoInvalidaError(f"Não foi possível calcular a derivada: derivada é zero.")
     erro = (intervalos[1] - intervalos[0])**3 / (12 * n**2) * max(abs(df(intervalos[0])), abs(df(intervalos[1])))

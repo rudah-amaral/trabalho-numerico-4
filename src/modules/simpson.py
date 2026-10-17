@@ -4,15 +4,17 @@ def metodo_simpson():
     print ("Método de Simpson\n")
     funcao = input("Digite a função f(x): ")
     f = criar_funcao(funcao)
-    a = traduzir_numero("Digite o limite inferior da integração: ")
-    b = traduzir_numero("Digite o limite superior da integração: ")
-    n = traduzir_numero("Digite o número de subintervalos (deve ser par): ")
+    a = traduzir_numero(input("Digite o limite inferior da integração: "), "limite inferior")
+    b = traduzir_numero(input("Digite o limite superior da integração: "), "limite superior")
+    n = traduzir_numero(input("Digite o número de subintervalos (deve ser par): "), "número de subintervalos")
 
-    if n % 2 != 0:
-        raise ExpressaoInvalidaError("O número de subintervalos deve ser par para o método de Simpson.")
+    if n != int(n) or n < 2 or int(n) % 2 != 0:
+        raise ExpressaoInvalidaError("O número de subintervalos deve ser um inteiro par (≥ 2) para o método de Simpson.")
+
+    n = int(n)
 
     resultado = simpson(f, a, b, n)
-    erro = erro_truncamento_simpson(f, n, [a, b])
+    erro = erro_truncamento_simpson(funcao, n, [a, b])
     drp = desvio_relativo_percentual(funcao, resultado, [a, b])
     print(f"O valor da integral é: {resultado}, com erro de truncamento estimado: {erro}\nDesvio relativo percentual em relação à integral de referência: {drp}%\n")
 
@@ -32,12 +34,12 @@ def simpson(f, a, b, n):
 
 def erro_truncamento_simpson(funcao, n, intervalos):
 
-
-    
-    df = criar_derivada(criar_funcao(criar_funcao(criar_funcao(funcao))))
+    ordem = 4
+    h = (intervalos[1] - intervalos[0]) / n
+    df = criar_derivada(funcao, ordem)
     if df == 0:
         raise ExpressaoInvalidaError(f"Não foi possível calcular a derivada: derivada zera.")
-    erro = (intervalos[1] - intervalos[0])**5 / (180 * n**4) * max(abs(df(intervalos[0])), abs(df(intervalos[1])))
+    erro = ((intervalos[1] - intervalos[0]) * h**4  / 180) * max(abs(df(intervalos[0])), abs(df(intervalos[1])))
 
     return erro
 

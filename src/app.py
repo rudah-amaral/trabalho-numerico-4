@@ -2,7 +2,7 @@ from modules.trapezio import metodo_trapezio
 from modules.simpson import metodo_simpson
 from modules.comparacoes import comparar_metodos
 
-if __name__ == "__main__":
+def main():
     while True:
         print("Escolha o método de integração:\n1. Método do Trapézio\n2. Método de Simpson\n3. Comparar métodos\n-1. Sair")
 
@@ -20,3 +20,6 @@ if __name__ == "__main__":
             funcao()
         else:
             print("Opção inválida. Por favor, escolha uma opção válida.\n")
+
+if __name__ == "__main__":
+    main()

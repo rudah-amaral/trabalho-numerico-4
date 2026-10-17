@@ -1,5 +1,6 @@
 import math
 import sympy
+from typing import Callable
 
 CONTEXTO_MATEMATICO = {
     "math": math,
@@ -31,18 +32,18 @@ def criar_funcao(expressao):
             raise ExpressaoInvalidaError (f"Não foi possível avaliar f({x}): {e}") from e
     return traduzindo_expressao
 
-def criar_derivada(expressao):
+def criar_derivada(expressao, ordem = 1) -> Callable[[float], float]:
     expressao = expressao.replace("^", "**")
     x = sympy.symbols("x")
 
     try:
         expr_sympy = sympy.sympify(expressao)
-        derivada_sympy = sympy.diff(expr_sympy, x)
+        derivada_sympy = sympy.diff(expr_sympy, x, ordem)
+        derivada_lambda = sympy.lambdify(x, derivada_sympy, modules=["math"])
     except Exception as e:
         raise ExpressaoInvalidaError(f"Não foi possível derivar '{expressao}': {e}") from e
-    derivada_lambda = sympy.lambdify(x, derivada_sympy, modules=["math"])
 
-    def dfuncao(valor):
+    def dfuncao(valor) -> float:
         try:
             return float(derivada_lambda(valor))
         except Exception as e:
