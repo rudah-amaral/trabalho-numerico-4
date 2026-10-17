@@ -1,5 +1,6 @@
 # Cache de nix-direnv
 .direnv
+.idea
 
 # Arquivos LaTeX temporários
 trabalho.*

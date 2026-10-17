@@ -22,4 +22,8 @@ def main():
             print("Opção inválida. Por favor, escolha uma opção válida.\n")
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()   # o que você já executa hoje
+    except Exception as e:
+        print(f"\nErro: {e}")
+    input("\nPressione Enter para sair...")
